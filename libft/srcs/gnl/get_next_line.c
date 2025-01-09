@@ -6,12 +6,12 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:46:32 by lbuisson          #+#    #+#             */
-/*   Updated: 2024/12/10 09:54:10 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/09 13:32:40 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "../libft.h"
+#include "../libft/libft.h"
 
 static char	*update_buffer(char *buffer)
 {
