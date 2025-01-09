@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/09 16:19:23 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/09 16:25:59 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,11 +55,13 @@ bonus: .bonus_server .bonus_client
 .bonus_client: $(C_OBJS_BONUS)
 	$(CC) $(CFLAGS) $(C_OBJS_BONUS) $(LIBFT_FLAGS) -o $(C_NAME)
 	@touch .bonus_client
+	@echo "💫✨💫 \033[92mClient Bonus compiled\033[0m 💫✨💫"
 
 .bonus_server: $(S_OBJS_BONUS)
 	$(MAKE) -C $(LIBFT_DIR)
 	$(CC) $(CFLAGS) $(S_OBJS_BONUS) $(LIBFT_FLAGS) -o $(S_NAME)
 	@touch .bonus_server
+	@echo "💫✨💫 \033[92mServer Bonus compiled\033[0m 💫✨💫"
 
 $(OBJDIR)/%.o: %.c Makefile $(LIBFT_A)
 	@mkdir -p $(dir $@)
