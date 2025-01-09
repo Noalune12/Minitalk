@@ -6,14 +6,14 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/09 10:28:39 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/09 10:36:45 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 C_NAME = client
 S_NAME = server
 CC = cc
-# CFLAGS = -Wall -Werror -Wextra -g3
+CFLAGS = -Wall -Werror -Wextra -g3
 
 C_SRCS = client.c
 S_SRCS = server.c

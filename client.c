@@ -1,10 +1,20 @@
-#include "client.h"
-#include <stdio.h>
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/09 10:33:47 by lbuisson          #+#    #+#             */
+/*   Updated: 2025/01/09 10:34:02 by lbuisson         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	g_signal;
+#include "client.h"
+
 // send each bytes using SIGUR1 for 0 and SIGUSR2 for 1
 
+int	g_signal;
 
 void	signal_handler(int signum)
 {
@@ -41,7 +51,7 @@ void	send_char(pid_t server_pid, char c)
 	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	pid_t	server_pid;
 	char	*message;
@@ -52,7 +62,7 @@ int main(int argc, char **argv)
 		ft_printf("Invalid arguments");
 		return (1);
 	}
-	server_pid = atoi(argv[1]);
+	server_pid = ft_atoi(argv[1]);
 	signal(SIGUSR1, &signal_handler);
 	message = argv[2];
 	i = 0;
@@ -62,13 +72,5 @@ int main(int argc, char **argv)
 		i++;
 	}
 	send_char(server_pid, '\0');
-	// printf("Message sent to server with PID %d\n", server_pid);
-	// if (kill(server_pid, SIGUSR1) == -1)
-	// {
-	// 	perror("Error sending signal");
-	// 	return 1;
-	// }
-
-	// printf("Signal SIGUSR1 sent to server with PID %d\n", server_pid);
 	return (0);
 }

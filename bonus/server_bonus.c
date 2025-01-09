@@ -1,12 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/09 10:35:29 by lbuisson          #+#    #+#             */
+/*   Updated: 2025/01/09 11:18:58 by lbuisson         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "server_bonus.h"
-#include <stdio.h>
 
 int	g_initialized_static;
 
-char *reallocate_message(char *message, char c, int len)
+char	*reallocate_message(char *message, char c, int len)
 {
-	char *ret;
-	int i;
+	char	*ret;
+	int		i;
 
 	i = 0;
 	ret = malloc(sizeof(char) * (len + 2));
@@ -26,7 +37,7 @@ char *reallocate_message(char *message, char c, int len)
 	return (ret);
 }
 
-void store_message(char c, int *i)
+void	store_message(char c, int *i)
 {
 	static char	*message;
 
@@ -49,13 +60,20 @@ void store_message(char c, int *i)
 		message = reallocate_message(message, c, *i);
 }
 
+void	reinit_static(char *received_char, int *bit_count, int *i)
+{
+	*received_char = 0;
+	*bit_count = 0;
+	(*i)++;
+}
+
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
 	static char	received_char;
 	static int	bit_count;
 	static int	i;
 
-	if (g_initialized_static == 0) // or with a global variable for message and if NULL initialize
+	if (g_initialized_static == 0)
 	{
 		received_char = 0;
 		bit_count = 0;
@@ -63,19 +81,17 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 		g_initialized_static = 1;
 	}
 	(void)context;
-		received_char <<= 1;
-		if (signum == SIGUSR2)
-			received_char |= 0x01;
-		bit_count++;
-		if (bit_count == 8)
-		{
-			store_message(received_char, &i);
-			if (i == -1)
-				kill(info->si_pid, SIGUSR2);
-			received_char = 0;
-			bit_count = 0;
-			i++;
-		}
+	received_char <<= 1;
+	if (signum == SIGUSR2)
+		received_char |= 0x01;
+	bit_count++;
+	if (bit_count == 8)
+	{
+		store_message(received_char, &i);
+		if (i == -1)
+			kill(info->si_pid, SIGUSR2);
+		reinit_static(&received_char, &bit_count, &i);
+	}
 	kill(info->si_pid, SIGUSR1);
 }
 

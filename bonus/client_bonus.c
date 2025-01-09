@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/09 10:36:31 by lbuisson          #+#    #+#             */
+/*   Updated: 2025/01/09 10:36:32 by lbuisson         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "client_bonus.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,7 +58,7 @@ void	send_char(pid_t server_pid, char c)
 	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	pid_t	server_pid;
 	char	*message;
@@ -57,7 +69,7 @@ int main(int argc, char **argv)
 		ft_printf("Invalid arguments");
 		return (1);
 	}
-	server_pid = atoi(argv[1]);
+	server_pid = ft_atoi(argv[1]);
 	signal(SIGUSR1, signal_handler);
 	signal(SIGUSR2, confirm_signal);
 	message = argv[2];
@@ -68,13 +80,5 @@ int main(int argc, char **argv)
 		i++;
 	}
 	send_char(server_pid, '\0');
-	// printf("Message sent to server with PID %d\n", server_pid);
-	// if (kill(server_pid, SIGUSR1) == -1)
-	// {
-	// 	perror("Error sending signal");
-	// 	return 1;
-	// }
-
-	// printf("Signal SIGUSR1 sent to server with PID %d\n", server_pid);
 	return (0);
 }
