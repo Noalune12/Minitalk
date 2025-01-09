@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/12 08:31:01 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/09 15:26:38 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/09 16:19:05 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ all : $(NAME)
 
 $(NAME) : $(OBJS)
 	ar rcs $(NAME) $(OBJS)
+	@echo "💫✨💫 \033[92mLibft compiled\033[0m 💫✨💫"
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
@@ -62,6 +63,7 @@ clean :
 
 fclean : clean
 	$(RM) $(NAME)
+	@echo "🧹🧹🧹 \033[92mCleaning libft complete\033[0m 🧹🧹🧹"
 
 re : fclean all
 

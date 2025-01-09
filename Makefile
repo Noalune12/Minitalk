@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/09 15:28:52 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/09 16:19:23 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,9 +43,12 @@ all: $(C_NAME) $(S_NAME)
 $(C_NAME): $(C_OBJS)
 	$(MAKE) -C $(LIBFT_DIR)
 	$(CC) $(CFLAGS) $(C_OBJS) $(LIBFT_FLAGS) -o $(C_NAME)
+	@echo "💫✨💫 \033[92mClient compiled\033[0m 💫✨💫"
 
 $(S_NAME): $(S_OBJS)
 	$(CC) $(CFLAGS) $(S_OBJS) $(LIBFT_FLAGS) -o $(S_NAME)
+	@echo "💫✨💫 \033[92mServer compiled\033[0m 💫✨💫"
+
 
 bonus: .bonus_server .bonus_client
 
@@ -73,6 +76,7 @@ clean:
 fclean: clean
 	$(RM) $(C_NAME) $(S_NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
+	@echo "🧹🧹🧹 \033[92mCleaning minitalk complete\033[0m 🧹🧹🧹"
 
 re : fclean all
 
