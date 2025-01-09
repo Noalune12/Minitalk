@@ -9,42 +9,36 @@ int	g_signal;
 void	signal_handler(int signum)
 {
 	if (signum == SIGUSR1)
-	{
 		g_signal = 1;
-	}
 }
 
 void	send_char(pid_t server_pid, char c)
 {
 	int	i;
 
-	i = 0;
-	while (i < 8)
+	i = 8;
+	while (--i >= 0)
 	{
 		g_signal = 0;
 		if (c & (1 << i))
 		{
 			if (kill(server_pid, SIGUSR2) == -1)
 			{
-				perror("Error sending signal");
-				exit(1);
+				ft_printf("Error sending signal");
+				exit(EXIT_FAILURE);
 			}
-			printf("1");
 		}
 		else
 		{
 			if (kill(server_pid, SIGUSR1) == -1)
 			{
-				perror("Error sending signal");
-				exit(1);
+				ft_printf("Error sending signal");
+				exit(EXIT_FAILURE);
 			}
-			printf("0");
 		}
 		while (g_signal == 0)
-			usleep(100); //usleep
-		i++;
+			usleep(100);
 	}
-	printf("\n");
 }
 
 int main(int argc, char **argv)
@@ -55,10 +49,10 @@ int main(int argc, char **argv)
 
 	if (argc != 3 || !argv[2][0])
 	{
-		//error handleer
-		return 1;
+		ft_printf("Invalid arguments");
+		return (1);
 	}
-	server_pid = atoi(argv[1]); //libft
+	server_pid = atoi(argv[1]);
 	signal(SIGUSR1, &signal_handler);
 	message = argv[2];
 	i = 0;

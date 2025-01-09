@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/08 18:52:34 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/09 07:38:55 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,8 @@ $(S_NAME): $(S_OBJS)
 	$(CC) $(CFLAGS) $(S_OBJS) $(LIBFT_FLAGS) -o $(S_NAME)
 
 $(C_NAME): $(C_OBJS)
-	$(CC) $(CFLAGS) $(C_OBJS) -o $(C_NAME)
+	$(MAKE) -C $(LIBFT_DIR)
+	$(CC) $(CFLAGS) $(C_OBJS) $(LIBFT_FLAGS) -o $(C_NAME)
 
 # bonus: $(NAME) $(OBJS_BONUS)
 # 	$(MAKE) fclean -C $(LIBFT_DIR)
