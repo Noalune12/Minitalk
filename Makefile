@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/09 07:38:55 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/09 10:28:39 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,10 +20,13 @@ S_SRCS = server.c
 
 C_OBJS = $(C_SRCS:.c=.o)
 S_OBJS = $(S_SRCS:.c=.o)
-# BONUS_DIR = ./bonus
-# BONUS = main_bonus.c exec_cmd_bonus.c utils_bonus.c dup_env_bonus.c split_cmd_bonus.c heredoc_bonus.c
-# BONUS_FILES = $(addprefix $(BONUS_DIR)/, $(BONUS))
-# OBJS_BONUS = $(BONUS_FILES:.c=.o)
+BONUS_DIR = ./bonus
+C_BONUS = client_bonus.c
+S_BONUS = server_bonus.c
+C_BONUS_FILES = $(addprefix $(BONUS_DIR)/, $(C_BONUS))
+S_BONUS_FILES = $(addprefix $(BONUS_DIR)/, $(S_BONUS))
+C_OBJS_BONUS = $(C_BONUS_FILES:.c=.o)
+S_OBJS_BONUS = $(S_BONUS_FILES:.c=.o)
 
 LIBFT_DIR = ./libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -49,12 +52,14 @@ $(C_NAME): $(C_OBJS)
 	$(MAKE) -C $(LIBFT_DIR)
 	$(CC) $(CFLAGS) $(C_OBJS) $(LIBFT_FLAGS) -o $(C_NAME)
 
-# bonus: $(NAME) $(OBJS_BONUS)
-# 	$(MAKE) fclean -C $(LIBFT_DIR)
-# 	rm -f $(NAME)
-# 	rm -rf $(OBJS)
-# 	$(MAKE) -C $(LIBFT_DIR)
-# 	$(CC) $(CFLAGS) $(OBJS_BONUS) $(LIBFT_FLAGS) -o $(NAME)
+bonus: $(NAME) $(C_OBJS_BONUS) $(S_OBJS_BONUS)
+	$(MAKE) fclean -C $(LIBFT_DIR)
+	rm -f $(NAME)
+	rm -rf $(C_OBJS)
+	rm -rf $(S_OBJS)
+	$(MAKE) -C $(LIBFT_DIR)
+	$(CC) $(CFLAGS) $(S_OBJS_BONUS) $(LIBFT_FLAGS) -o $(S_NAME)
+	$(CC) $(CFLAGS) $(C_OBJS_BONUS) $(LIBFT_FLAGS) -o $(C_NAME)
 
 %.o: %.c Makefile
 	$(CC) $(CFLAGS) -I . -c $< -o $@
@@ -62,6 +67,8 @@ $(C_NAME): $(C_OBJS)
 clean:
 	rm -rf $(C_OBJS)
 	rm -rf $(S_OBJS)
+	rm -rf $(C_OBJS_BONUS)
+	rm -rf $(S_OBJS_BONUS)
 
 fclean: clean
 	$(MAKE) fclean -C $(LIBFT_DIR)
