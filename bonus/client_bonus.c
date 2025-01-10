@@ -6,7 +6,7 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:36:31 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/10 08:58:00 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/10 12:10:59 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,9 @@ void	send_char(pid_t server_pid, char c)
 	{
 		g_signal = 0;
 		if (c & (1 << i))
-		{
-			if (kill(server_pid, SIGUSR2) == -1)
-			{
-				ft_printf("Error sending signal");
-				exit(EXIT_FAILURE);
-			}
-		}
+			kill(server_pid, SIGUSR2);
 		else
-		{
-			if (kill(server_pid, SIGUSR1) == -1)
-			{
-				ft_printf("Error sending signal");
-				exit(EXIT_FAILURE);
-			}
-		}
+			kill(server_pid, SIGUSR1);
 		wait_signal();
 	}
 }

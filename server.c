@@ -6,13 +6,11 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:31:30 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/10 08:59:21 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/10 12:08:31 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
-
-int	g_initialized_static;
 
 char	*reallocate_message(char *message, char c, int len)
 {
@@ -21,14 +19,10 @@ char	*reallocate_message(char *message, char c, int len)
 
 	i = 0;
 	ret = malloc(sizeof(char) * (len + 2));
-	if (len == 5)
-	{
-		free(ret);
-		ret = NULL;
-	}
 	if (!ret)
 	{
 		free(message);
+		ft_printf("Malloc failed");
 		exit(EXIT_FAILURE);
 	}
 	while (message[i])
@@ -50,7 +44,10 @@ void	store_message(char c, int *i)
 	{
 		message = malloc(2 * sizeof(char));
 		if (!message)
+		{
+			ft_printf("Malloc failed");
 			exit(EXIT_FAILURE);
+		}
 		(message)[0] = c;
 		(message)[1] = '\0';
 	}
@@ -67,17 +64,10 @@ void	store_message(char c, int *i)
 
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
-	static char	received_char;
-	static int	bit_count;
-	static int	i;
+	static char	received_char = 0;
+	static int	bit_count = 0;
+	static int	i = 0;
 
-	if (g_initialized_static == 0)
-	{
-		received_char = 0;
-		bit_count = 0;
-		i = 0;
-		g_initialized_static = 1;
-	}
 	(void)context;
 	received_char <<= 1;
 	if (signum == SIGUSR2)
@@ -97,11 +87,12 @@ int	main(void)
 {
 	struct sigaction	s_sigaction;
 
-	g_initialized_static = 0;
-	ft_printf("Server PID = %d\n", getpid());
+	ft_printf("Welcome to lbuisson's server\nServer PID = %d\n", getpid());
 	s_sigaction.sa_sigaction = &signal_handler;
 	s_sigaction.sa_flags = SA_SIGINFO;
 	sigemptyset(&s_sigaction.sa_mask);
+	sigaddset(&s_sigaction.sa_mask, SIGUSR1);
+	sigaddset(&s_sigaction.sa_mask, SIGUSR2);
 	sigaction(SIGUSR1, &s_sigaction, NULL);
 	sigaction(SIGUSR2, &s_sigaction, NULL);
 	while (1)
