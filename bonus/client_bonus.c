@@ -6,16 +6,13 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:36:31 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/09 10:36:32 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/10 08:58:00 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client_bonus.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 int	g_signal;
-// send each bytes using SIGUR1 for 0 and SIGUSR2 for 1
 
 void	confirm_signal(int signum)
 {
@@ -27,6 +24,23 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGUSR1)
 		g_signal = 1;
+}
+
+void	wait_signal(void)
+{
+	int	wait;
+
+	wait = 0;
+	while (g_signal == 0)
+	{
+		usleep(100);
+		wait++;
+		if (wait >= 5000)
+		{
+			ft_printf("Sending signal took too long");
+			exit(EXIT_FAILURE);
+		}
+	}
 }
 
 void	send_char(pid_t server_pid, char c)
@@ -53,8 +67,7 @@ void	send_char(pid_t server_pid, char c)
 				exit(EXIT_FAILURE);
 			}
 		}
-		while (g_signal == 0)
-			usleep(100);
+		wait_signal();
 	}
 }
 

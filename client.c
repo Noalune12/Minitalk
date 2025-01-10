@@ -6,7 +6,7 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:33:47 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/09 11:39:51 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/10 08:56:21 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,23 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGUSR1)
 		g_signal = 1;
+}
+
+void	wait_signal(void)
+{
+	int	wait;
+
+	wait = 0;
+	while (g_signal == 0)
+	{
+		usleep(100);
+		wait++;
+		if (wait >= 5000)
+		{
+			ft_printf("Sending signal took too long");
+			exit(EXIT_FAILURE);
+		}
+	}
 }
 
 void	send_char(pid_t server_pid, char c)
@@ -46,8 +63,7 @@ void	send_char(pid_t server_pid, char c)
 				exit(EXIT_FAILURE);
 			}
 		}
-		while (g_signal == 0)
-			usleep(100);
+		wait_signal();
 	}
 }
 

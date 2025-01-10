@@ -6,7 +6,7 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:31:30 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/09 11:18:53 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/10 08:59:21 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ char	*reallocate_message(char *message, char c, int len)
 
 	i = 0;
 	ret = malloc(sizeof(char) * (len + 2));
+	if (len == 5)
+	{
+		free(ret);
+		ret = NULL;
+	}
 	if (!ret)
 	{
 		free(message);
