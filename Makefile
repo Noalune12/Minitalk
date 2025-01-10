@@ -6,12 +6,13 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/09 16:25:59 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/10 08:24:08 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 C_NAME = client
 S_NAME = server
+NAME = $(C_NAME) $(S_NAME)
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -g3 -MMD -MP
 
@@ -33,35 +34,40 @@ S_OBJS_BONUS = $(addprefix $(OBJDIR)/, $(S_BONUS_FILES:.c=.o))
 
 LIBFT_DIR = libft
 LIBFT_A = libft/libft.a
-LIBFT_FLAGS = -L$(LIBFT_DIR) $(LIBFT_A)
-LIBFT_DEPS = $(addprefix $(LIBFT_DIR)/, $(patsubst %.c, %.o, $(notdir $(FUNCTIONS))))
+LIBFT_FLAGS = -L$(LIBFT_DIR) $(LIBFT_A) -lft
+LIBFT_SRCDIR = $(LIBFT_DIR)/srcs
+LIBFT_OBJDIR = $(LIBFT_DIR)/objs
+
+LIBFT = $(LIBFT_SRCDIR)/libft
+PRINTF = $(LIBFT_SRCDIR)/ft_printf
+GNL = $(LIBFT_SRCDIR)/gnl
+
+LIBFT_FUNCTIONS = $(LIBFT)/ft_atoi.c $(LIBFT)/ft_bzero.c $(LIBFT)/ft_calloc.c $(LIBFT)/ft_isalnum.c $(LIBFT)/ft_isalpha.c $(LIBFT)/ft_isascii.c \
+	$(LIBFT)/ft_isdigit.c $(LIBFT)/ft_isprint.c $(LIBFT)/ft_itoa.c $(LIBFT)/ft_memchr.c $(LIBFT)/ft_memcmp.c \
+	$(LIBFT)/ft_memcpy.c $(LIBFT)/ft_memmove.c $(LIBFT)/ft_memset.c $(LIBFT)/ft_putchar_fd.c $(LIBFT)/ft_putendl_fd.c \
+	$(LIBFT)/ft_putnbr_fd.c $(LIBFT)/ft_putstr_fd.c $(LIBFT)/ft_split.c $(LIBFT)/ft_strchr.c $(LIBFT)/ft_strdup.c \
+	$(LIBFT)/ft_strjoin.c $(LIBFT)/ft_strlcat.c $(LIBFT)/ft_strlcpy.c $(LIBFT)/ft_strlen.c $(LIBFT)/ft_strmapi.c \
+	$(LIBFT)/ft_striteri.c $(LIBFT)/ft_strncmp.c $(LIBFT)/ft_strnstr.c $(LIBFT)/ft_strrchr.c $(LIBFT)/ft_substr.c \
+	$(LIBFT)/ft_strtrim.c $(LIBFT)/ft_tolower.c $(LIBFT)/ft_toupper.c \
+	$(LIBFT)/ft_lstnew.c $(LIBFT)/ft_lstadd_front.c $(LIBFT)/ft_lstsize.c $(LIBFT)/ft_lstlast.c $(LIBFT)/ft_lstadd_back.c \
+	$(LIBFT)/ft_lstdelone.c $(LIBFT)/ft_lstclear.c $(LIBFT)/ft_lstiter.c $(LIBFT)/ft_lstmap.c \
+	$(PRINTF)/ft_numbers.c $(PRINTF)/ft_words_pointer.c $(PRINTF)/ft_printf.c \
+	$(GNL)/get_next_line.c $(GNL)/get_next_line_utils.c
+
+LIBFT_OBJS = $(patsubst $(LIBFT_SRCDIR)/%.c,$(LIBFT_OBJDIR)/%.o,$(LIBFT_FUNCTIONS))
+LIBFT_DEPS = $(LIBFT_OBJS:.o=.d)
 
 DEPS = $(C_OBJS:.o=.d) $(S_OBJS:.o=.d) $(C_OBJS_BONUS:.o=.d) $(S_OBJS_BONUS:.o=.d) $(LIBFT_DEPS)
 
-all: $(C_NAME) $(S_NAME)
+all: $(NAME)
 
-$(C_NAME): $(C_OBJS)
-	$(MAKE) -C $(LIBFT_DIR)
+$(C_NAME): $(LIBFT_A) $(C_OBJS) libft
 	$(CC) $(CFLAGS) $(C_OBJS) $(LIBFT_FLAGS) -o $(C_NAME)
 	@echo "💫✨💫 \033[92mClient compiled\033[0m 💫✨💫"
 
-$(S_NAME): $(S_OBJS)
+$(S_NAME): $(LIBFT_A) $(S_OBJS) libft
 	$(CC) $(CFLAGS) $(S_OBJS) $(LIBFT_FLAGS) -o $(S_NAME)
 	@echo "💫✨💫 \033[92mServer compiled\033[0m 💫✨💫"
-
-
-bonus: .bonus_server .bonus_client
-
-.bonus_client: $(C_OBJS_BONUS)
-	$(CC) $(CFLAGS) $(C_OBJS_BONUS) $(LIBFT_FLAGS) -o $(C_NAME)
-	@touch .bonus_client
-	@echo "💫✨💫 \033[92mClient Bonus compiled\033[0m 💫✨💫"
-
-.bonus_server: $(S_OBJS_BONUS)
-	$(MAKE) -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $(S_OBJS_BONUS) $(LIBFT_FLAGS) -o $(S_NAME)
-	@touch .bonus_server
-	@echo "💫✨💫 \033[92mServer Bonus compiled\033[0m 💫✨💫"
 
 $(OBJDIR)/%.o: %.c Makefile $(LIBFT_A)
 	@mkdir -p $(dir $@)
@@ -69,6 +75,21 @@ $(OBJDIR)/%.o: %.c Makefile $(LIBFT_A)
 
 $(LIBFT_A):
 	$(MAKE) -C $(LIBFT_DIR)
+
+libft : $(LIBFT_A) $(LIBFT_OBJS)
+	$(MAKE) -C $(LIBFT_DIR)
+
+bonus: .bonus_server .bonus_client
+
+.bonus_client: $(LIBFT_A) $(C_OBJS_BONUS) libft
+	$(CC) $(CFLAGS) $(C_OBJS_BONUS) $(LIBFT_FLAGS) -o $(C_NAME)
+	@touch .bonus_client
+	@echo "💫✨💫 \033[92mClient Bonus compiled\033[0m 💫✨💫"
+
+.bonus_server: $(LIBFT_A) $(S_OBJS_BONUS) libft
+	$(CC) $(CFLAGS) $(S_OBJS_BONUS) $(LIBFT_FLAGS) -o $(S_NAME)
+	@touch .bonus_server
+	@echo "💫✨💫 \033[92mServer Bonus compiled\033[0m 💫✨💫"
 
 clean:
 	$(RM) -rf $(OBJDIR)
@@ -82,6 +103,6 @@ fclean: clean
 
 re : fclean all
 
-.PHONY : all clean fclean re bonus
+.PHONY : all clean fclean re bonus libft
 
 -include $(DEPS)

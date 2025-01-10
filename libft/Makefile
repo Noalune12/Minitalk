@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/12 08:31:01 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/09 16:19:05 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/10 07:50:17 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,14 +39,6 @@ FUNCTIONS = $(LIBFT)/ft_atoi.c $(LIBFT)/ft_bzero.c $(LIBFT)/ft_calloc.c $(LIBFT)
 
 OBJS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(FUNCTIONS))
 DEPS = $(OBJS:.o=.d)
-
-# # Color variables
-# GREEN = \033[0;92m
-# RED = \033[0;91m
-# YELLOW = \033[0;93m
-# BLUE = \033[0;94m
-# RESET = \033[0m
-# COMPILE_MSG = $(GREEN)Libft a été compilée avec succès!$(RESET)
 
 all : $(NAME)
 
