@@ -6,11 +6,13 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:35:29 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/10 12:09:26 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/10 13:04:43 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server_bonus.h"
+
+int	g_signal_received;
 
 char	*reallocate_message(char *message, char c, int len)
 {
@@ -62,12 +64,24 @@ void	store_message(char c, int *i)
 		message = reallocate_message(message, c, *i);
 }
 
+void	reinit_static(char *received_char, int *bit_count, int *i)
+{
+	*received_char = 0;
+	*bit_count = 0;
+	(*i)++;
+}
+
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
 	static char	received_char = 0;
 	static int	bit_count = 0;
 	static int	i = 0;
 
+	if (g_signal_received == 0)
+	{
+		g_signal_received = 1;
+		return ;
+	}
 	(void)context;
 	received_char <<= 1;
 	if (signum == SIGUSR2)
@@ -77,10 +91,11 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	{
 		store_message(received_char, &i);
 		if (i == -1)
+		{
 			kill(info->si_pid, SIGUSR2);
-		received_char = 0;
-		bit_count = 0;
-		i++;
+			g_signal_received = 0;
+		}
+		reinit_static(&received_char, &bit_count, &i);
 	}
 	kill(info->si_pid, SIGUSR1);
 }
@@ -89,6 +104,7 @@ int	main(void)
 {
 	struct sigaction	s_sigaction;
 
+	g_signal_received = 0;
 	ft_printf("Welcome to lbuisson's server\nServer PID = %d\n", getpid());
 	s_sigaction.sa_sigaction = signal_handler;
 	s_sigaction.sa_flags = SA_SIGINFO;
