@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/10 08:24:08 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/13 08:00:00 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ C_NAME = client
 S_NAME = server
 NAME = $(C_NAME) $(S_NAME)
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g3 -MMD -MP
+CFLAGS = -Wall -Werror -Wextra -MMD -MP
 
 C_SRCS = client.c
 S_SRCS = server.c
@@ -59,34 +59,35 @@ LIBFT_DEPS = $(LIBFT_OBJS:.o=.d)
 
 DEPS = $(C_OBJS:.o=.d) $(S_OBJS:.o=.d) $(C_OBJS_BONUS:.o=.d) $(S_OBJS_BONUS:.o=.d) $(LIBFT_DEPS)
 
-all: $(NAME)
+all: $(LIBFT_A) $(NAME)
 
-$(C_NAME): $(LIBFT_A) $(C_OBJS) libft
+$(C_NAME): $(C_OBJS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(C_OBJS) $(LIBFT_FLAGS) -o $(C_NAME)
 	@echo "💫✨💫 \033[92mClient compiled\033[0m 💫✨💫"
 
-$(S_NAME): $(LIBFT_A) $(S_OBJS) libft
+$(S_NAME): $(S_OBJS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(S_OBJS) $(LIBFT_FLAGS) -o $(S_NAME)
 	@echo "💫✨💫 \033[92mServer compiled\033[0m 💫✨💫"
 
-$(OBJDIR)/%.o: %.c Makefile $(LIBFT_A)
+$(OBJDIR)/%.o: %.c Makefile
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(LIBFT_A):
-	$(MAKE) -C $(LIBFT_DIR)
+$(LIBFT_OBJDIR)/%.o: $(LIBFT_SRCDIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-libft : $(LIBFT_A) $(LIBFT_OBJS)
+$(LIBFT_A): $(LIBFT_OBJS)
 	$(MAKE) -C $(LIBFT_DIR)
 
 bonus: .bonus_server .bonus_client
 
-.bonus_client: $(LIBFT_A) $(C_OBJS_BONUS) libft
+.bonus_client: $(C_OBJS_BONUS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(C_OBJS_BONUS) $(LIBFT_FLAGS) -o $(C_NAME)
 	@touch .bonus_client
 	@echo "💫✨💫 \033[92mClient Bonus compiled\033[0m 💫✨💫"
 
-.bonus_server: $(LIBFT_A) $(S_OBJS_BONUS) libft
+.bonus_server: $(S_OBJS_BONUS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(S_OBJS_BONUS) $(LIBFT_FLAGS) -o $(S_NAME)
 	@touch .bonus_server
 	@echo "💫✨💫 \033[92mServer Bonus compiled\033[0m 💫✨💫"
@@ -97,8 +98,7 @@ clean:
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(RM) $(C_NAME) $(S_NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(RM) $(C_NAME) $(S_NAME) $(LIBFT_A)
 	@echo "🧹🧹🧹 \033[92mCleaning minitalk complete\033[0m 🧹🧹🧹"
 
 re : fclean all
