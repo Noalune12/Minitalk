@@ -6,7 +6,7 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:36:31 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/10 13:00:04 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/13 11:51:19 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	main(int argc, char **argv)
 		ft_printf("PID is not valid");
 		return (1);
 	}
+	usleep(100);
 	signal(SIGUSR1, signal_handler);
 	signal(SIGUSR2, confirm_signal);
 	message = argv[2];

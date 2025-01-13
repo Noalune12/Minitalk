@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/13 08:00:00 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/13 12:01:13 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,10 +63,12 @@ all: $(LIBFT_A) $(NAME)
 
 $(C_NAME): $(C_OBJS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(C_OBJS) $(LIBFT_FLAGS) -o $(C_NAME)
+	$(RM) $(C_OBJS_BONUS) $(C_OBJS_BONUS:.o=.d)
 	@echo "💫✨💫 \033[92mClient compiled\033[0m 💫✨💫"
 
 $(S_NAME): $(S_OBJS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(S_OBJS) $(LIBFT_FLAGS) -o $(S_NAME)
+	$(RM) $(S_OBJS_BONUS) $(S_OBJS_BONUS:.o=.d)
 	@echo "💫✨💫 \033[92mServer compiled\033[0m 💫✨💫"
 
 $(OBJDIR)/%.o: %.c Makefile
@@ -84,11 +86,13 @@ bonus: .bonus_server .bonus_client
 
 .bonus_client: $(C_OBJS_BONUS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(C_OBJS_BONUS) $(LIBFT_FLAGS) -o $(C_NAME)
+	$(RM) $(C_OBJS) $(C_OBJS:.o=.d)
 	@touch .bonus_client
 	@echo "💫✨💫 \033[92mClient Bonus compiled\033[0m 💫✨💫"
 
 .bonus_server: $(S_OBJS_BONUS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(S_OBJS_BONUS) $(LIBFT_FLAGS) -o $(S_NAME)
+	$(RM) $(S_OBJS) $(S_OBJS:.o=.d)
 	@touch .bonus_server
 	@echo "💫✨💫 \033[92mServer Bonus compiled\033[0m 💫✨💫"
 
@@ -103,6 +107,6 @@ fclean: clean
 
 re : fclean all
 
-.PHONY : all clean fclean re bonus libft
+.PHONY : all clean fclean re bonus clean_bonus
 
 -include $(DEPS)
