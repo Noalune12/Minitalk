@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/13 12:01:13 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/13 12:11:01 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ S_NAME = server
 NAME = $(C_NAME) $(S_NAME)
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -MMD -MP
+RM = rm -f
 
 C_SRCS = client.c
 S_SRCS = server.c
