@@ -6,13 +6,13 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:33:47 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/15 08:29:30 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/15 09:04:12 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-int	g_signal;
+int	g_signal = 0;
 
 void	signal_handler(int signum)
 {
@@ -86,7 +86,7 @@ int	main(int argc, char **argv)
 		ft_printf("PID is not valid");
 		return (1);
 	}
-	signal(SIGUSR1, &signal_handler);
+	signal(SIGUSR1, signal_handler);
 	wait_signal();
 	message = argv[2];
 	i = -1;

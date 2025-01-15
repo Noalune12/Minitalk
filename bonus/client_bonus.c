@@ -6,24 +6,20 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:36:31 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/15 08:39:24 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/15 09:05:13 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client_bonus.h"
 
-int	g_signal;
-
-void	confirm_signal(int signum)
-{
-	if (signum == SIGUSR2)
-		ft_printf("message received\n");
-}
+int	g_signal = 0;
 
 void	signal_handler(int signum)
 {
 	if (signum == SIGUSR1)
 		g_signal = 1;
+	if (signum == SIGUSR2)
+		ft_printf("message received\n");
 }
 
 void	wait_signal(void)
@@ -60,6 +56,20 @@ void	send_char(pid_t server_pid, char c)
 	}
 }
 
+int	check_pid(char *pid)
+{
+	int	i;
+
+	i = 0;
+	while (pid[i])
+	{
+		if (ft_isdigit(pid[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	pid_t	server_pid;
@@ -78,9 +88,9 @@ int	main(int argc, char **argv)
 		ft_printf("PID is not valid");
 		return (1);
 	}
-	signal(SIGUSR1, &signal_handler);
+	signal(SIGUSR1, signal_handler);
 	wait_signal();
-	signal(SIGUSR2, confirm_signal);
+	signal(SIGUSR2, signal_handler);
 	message = argv[2];
 	i = -1;
 	while (message[++i])
