@@ -6,13 +6,13 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:31:30 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/10 13:05:05 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/15 07:35:31 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-int	g_signal_received;
+int	g_signal_received = 0;
 
 char	*reallocate_message(char *message, char c, int len)
 {
@@ -73,6 +73,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	if (g_signal_received == 0)
 	{
 		g_signal_received = 1;
+		kill(info->si_pid, SIGUSR1);
 		return ;
 	}
 	(void)context;
@@ -96,7 +97,6 @@ int	main(void)
 {
 	struct sigaction	s_sigaction;
 
-	g_signal_received = 0;
 	ft_printf("Welcome to lbuisson's server\nServer PID = %d\n", getpid());
 	s_sigaction.sa_sigaction = &signal_handler;
 	s_sigaction.sa_flags = SA_SIGINFO;

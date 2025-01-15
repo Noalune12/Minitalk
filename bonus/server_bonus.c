@@ -6,13 +6,13 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:35:29 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/10 13:04:43 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/15 08:36:22 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server_bonus.h"
 
-int	g_signal_received;
+int	g_signal_received = 0;
 
 char	*reallocate_message(char *message, char c, int len)
 {
@@ -69,6 +69,8 @@ void	reinit_static(char *received_char, int *bit_count, int *i)
 	*received_char = 0;
 	*bit_count = 0;
 	(*i)++;
+	if (*i == 0)
+		g_signal_received = 0;
 }
 
 void	signal_handler(int signum, siginfo_t *info, void *context)
@@ -80,6 +82,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	if (g_signal_received == 0)
 	{
 		g_signal_received = 1;
+		kill(info->si_pid, SIGUSR1);
 		return ;
 	}
 	(void)context;
@@ -91,10 +94,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	{
 		store_message(received_char, &i);
 		if (i == -1)
-		{
 			kill(info->si_pid, SIGUSR2);
-			g_signal_received = 0;
-		}
 		reinit_static(&received_char, &bit_count, &i);
 	}
 	kill(info->si_pid, SIGUSR1);

@@ -6,7 +6,7 @@
 /*   By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 10:33:47 by lbuisson          #+#    #+#             */
-/*   Updated: 2025/01/13 12:14:32 by lbuisson         ###   ########lyon.fr   */
+/*   Updated: 2025/01/15 08:29:30 by lbuisson         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	wait_signal(void)
 			exit(EXIT_FAILURE);
 		}
 	}
+	g_signal = 0;
 }
 
 void	send_char(pid_t server_pid, char c)
@@ -53,6 +54,20 @@ void	send_char(pid_t server_pid, char c)
 	}
 }
 
+int	check_pid(char *pid)
+{
+	int	i;
+
+	i = 0;
+	while (pid[i])
+	{
+		if (ft_isdigit(pid[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	pid_t	server_pid;
@@ -65,13 +80,14 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	server_pid = ft_atoi(argv[1]);
-	if (server_pid <= 0 || kill(server_pid, SIGUSR1) == -1)
+	if (server_pid <= 0 || check_pid(argv[1]) == 0
+		|| kill(server_pid, SIGUSR1) == -1)
 	{
 		ft_printf("PID is not valid");
 		return (1);
 	}
-	usleep(100);
 	signal(SIGUSR1, &signal_handler);
+	wait_signal();
 	message = argv[2];
 	i = -1;
 	while (message[++i])

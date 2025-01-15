@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/17 17:11:29 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/13 12:11:01 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/15 08:40:09 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ C_OBJS = $(addprefix $(OBJDIR)/, $(C_SRCS:.c=.o))
 S_OBJS = $(addprefix $(OBJDIR)/, $(S_SRCS:.c=.o))
 
 BONUS_DIR = bonus
-C_BONUS = client_bonus.c
+C_BONUS = client_bonus.c client_utils_bonus.c
 S_BONUS = server_bonus.c
 C_BONUS_FILES = $(addprefix $(BONUS_DIR)/, $(C_BONUS))
 S_BONUS_FILES = $(addprefix $(BONUS_DIR)/, $(S_BONUS))
