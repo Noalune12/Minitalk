@@ -6,7 +6,7 @@
 #    By: lbuisson <lbuisson@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/12 08:31:01 by lbuisson          #+#    #+#              #
-#    Updated: 2025/01/10 07:50:17 by lbuisson         ###   ########lyon.fr    #
+#    Updated: 2025/01/17 14:59:11 by lbuisson         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ $(NAME) : $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 	@echo "💫✨💫 \033[92mLibft compiled\033[0m 💫✨💫"
 
-$(OBJDIR)/%.o : $(SRCDIR)/%.c
+$(OBJDIR)/%.o : $(SRCDIR)/%.c Makefile
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
